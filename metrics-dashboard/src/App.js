@@ -1,18 +1,15 @@
 import React from 'react';
 import './App.css';
-import { BrowserRouter as Router, Route} from 'react-router-dom';
-import LoginPage from './components/LoginPage.js';
-import NavBar from './components/NavBar.js';
+// import { BrowserRouter as Router, Route} from 'react-router-dom';
+import Button from '@material-ui/core/Button';
+
 
 function App() {
-  return (
-    <Router>
-      <div>
-        <NavBar />
-        <Route name="login" exact path="/" component={LoginPage} />
-      </div>
-    </Router>
-  );
+ return (
+   <Button variant="contained" color="primary">
+     Hello World
+   </Button>
+ )
 }
 
 export default App;
