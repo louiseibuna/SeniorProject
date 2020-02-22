@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 // import Button from '@material-ui/core/Button';
 import SignUpPage from './components/SignUpPage.js';
+import LoginPage from './components/LoginPage.js';
 import {
   Route,
   NavLink,
@@ -15,10 +16,9 @@ function App() {
      <div>
         <ul>
           <h1>PMPro</h1>
-          <li><NavLink to="/">SignUpPage</NavLink></li>
       </ul>
         <div className="content">
-        <Route path="/"component={SignUpPage}/>
+        <Route path="/"component={LoginPage}/>
         </div>
      </div>
    </HashRouter>
