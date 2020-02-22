@@ -1,14 +1,27 @@
 import React from 'react';
 import './App.css';
-// import { BrowserRouter as Router, Route} from 'react-router-dom';
-import Button from '@material-ui/core/Button';
+// import Button from '@material-ui/core/Button';
+import SignUpPage from './components/SignUpPage.js';
+import {
+  Route,
+  NavLink,
+  HashRouter
+} from "react-router-dom";
 
 
 function App() {
  return (
-   <Button variant="contained" color="primary">
-     Hello World
-   </Button>
+   <HashRouter>
+     <div>
+        <ul>
+          <h1>PMPro</h1>
+          <li><NavLink to="/">SignUpPage</NavLink></li>
+      </ul>
+        <div className="content">
+        <Route path="/"component={SignUpPage}/>
+        </div>
+     </div>
+   </HashRouter>
  )
 }
 
