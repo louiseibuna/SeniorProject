@@ -3,6 +3,7 @@ import './App.css';
 // import Button from '@material-ui/core/Button';
 import SignUpPage from './components/SignUpPage.js';
 import LoginPage from './components/LoginPage.js';
+import Dashboard from './components/Dashboard.js';
 import {
   Route,
   NavLink,
@@ -18,7 +19,7 @@ function App() {
           <h1>PMPro</h1>
       </ul>
         <div className="content">
-        <Route path="/"component={LoginPage}/>
+        <Route path="/"component={Dashboard}/>
         </div>
      </div>
    </HashRouter>
