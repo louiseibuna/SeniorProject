@@ -17,7 +17,7 @@ import Title from './Title.js';
 // ];
 
 const data01 = [
-  { name: 'Group A', value: 400 }, { name: 'Group B', value: 300 },
+  { name: 'Open', value: 1 }, { name: 'Closed', value: 37 }, { name: 'Merged', value: 63 },
 ];
 
 const data02 = [
