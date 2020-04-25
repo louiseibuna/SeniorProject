@@ -2,7 +2,7 @@ import React from 'react';
 import '../styles/Dashboard.css';
 import 'bootstrap-4-grid/css/grid.min.css';
 import PieChart from './PieChart';
-import BarChart from './BarChart';
+import LineChart from './LineChart';
 
 export const Dashboard = () => (
     <div className="bootstrap-wrapper">
@@ -18,8 +18,8 @@ export const Dashboard = () => (
             <PieChart />
         </div>
         <div className="col-md-6">
-            <h3>Bar Graph</h3>
-            <BarChart />
+            <h3>Line Graph</h3>
+            <LineChart />
         </div>
      </div>
       <h4 style={{ display: 'none' }}>Dialog Shown/Hidden with Logic</h4>
