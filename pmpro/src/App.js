@@ -3,10 +3,6 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { NavBar } from './components/NavBar';
 import { Layout } from './components/Layout';
 import { Dashboard } from './components/Dashboard';
-import ApolloClient from 'apollo-boost';
-import { ApolloProvider } from 'react-apollo';
-import PullRequests from './PullRequests';
-import Column from './Column';
 import './App.css';
 
 // const client = new ApolloClient({
