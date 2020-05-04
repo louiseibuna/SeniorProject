@@ -3,20 +3,28 @@ import axios from "axios";
 
 const API_KEY = process.env.REACT_APP_API_KEY;
 
+require('dotenv').config()
+
 class AxiosRequests extends React.Component {
 
     constructor() {
         super();
         this.state = {
-            pullRequests: [],
-            totalCount: ''
+            totalPR: '',
+            openedPR: '',
+            mergedPR: '',
+            closedPR: '',
+            totalIssues: '',
+
         }
     }
 
     makeGraphQLQuery(query) {
         return axios({
             "method": "POST",
-            "headers": { "Authorization": 'Bearer ' + API_KEY},
+            "headers": {
+                "Authorization": 'Bearer ' + API_KEY
+            },
             "url": "https://api.github.com/graphql",
             "data": {
                 "query": query
@@ -29,24 +37,29 @@ class AxiosRequests extends React.Component {
             let result = await this.makeGraphQLQuery(`
              {
               repository(owner:"scrapy", name:"scrapy") {
-                pullRequests(first: 100, states: [OPEN, CLOSED, MERGED]) {
-                  totalCount
-                  nodes {
-                    createdAt
-                    number
-                    title
-                    state
+                  totalPR: pullRequests(first: 100, states: OPEN) {
+                      totalCount
                   }
-                  pageInfo {
-                    hasNextPage
-                    endCursor
+                  openedPR: pullRequests(first: 100, states: OPEN) {
+                      totalCount
                   }
-                }
+                  mergedPR: pullRequests(first: 100, states: MERGED) {
+                      totalCount
+                  }
+                  closedPR: pullRequests(first: 100, states: CLOSED) {
+                      totalCount
+                  }
+                  totalIssues: issues {
+                      totalCount
+                  }
               }
-          }`
+              }`
       );
-            this.setState({ pullRequests: result.data.repository.pullRequests.nodes,
-                            totalCount: result.data.repository.pullRequests.totalCount });
+            this.setState({ totalPR: result.data.repository.totalPR.totalCount,
+                            openedPR: result.data.repository.openedPR.totalCount,
+                            mergedPR: result.data.repository.mergedPR.totalCount,
+                            closedPR: result.data.repository.closedPR.totalCount,
+                            totalIssues: result.data.repository.totalIssues.totalCount});
         } catch (exception) {
             console.error(exception);
         }
@@ -55,12 +68,11 @@ class AxiosRequests extends React.Component {
     render() {
         return (
             <div>
-                {this.state.totalCount}
-                {
-                    this.state.pullRequests.map((pullRequest, key) => {
-                        return <p key={key}> {pullRequest.title} has STATE: {pullRequest.state}</p>
-                    })
-                }
+                <p>totalPR: {this.state.totalPR}</p>
+                <p>openedPR: {this.state.openedPR}</p>
+                <p>mergedPR: {this.state.mergedPR}</p>
+                <p>closedPR: {this.state.closedPR}</p>
+                <p>totalIssues: {this.state.totalIssues}</p>
 
             </div>
         );
