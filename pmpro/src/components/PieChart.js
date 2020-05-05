@@ -30,9 +30,9 @@ class PieChart extends React.Component {
                         "#AC64AD"
                     ],
                     hoverBackgroundColor: [
-                        "#FF5A5E",
-                        "#5AD3D1",
+                        "#c1ebbd",
                         "#FFC870",
+                        "#5AD3D1",
                         "#A8B3C5",
                         "#616774",
                         "#DA92DB"
