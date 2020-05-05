@@ -17,14 +17,14 @@ class PieChart extends React.Component {
             closedPR: '',
             totalIssues: '',
             dataPie: {
-                labels: ["totalPR", "openedPR", "mergedPR", "closedPR", "totalIssues"],
+                labels: ["Open PRs", "Closed PRs", "Closed & Merged PRs"],
                 datasets: [
                     {
                     data: [],
                     backgroundColor: [
-                        "#F7464A",
-                        "#46BFBD",
+                        "#98DE91",
                         "#FDB45C",
+                        "#46BFBD",
                         "#949FB1",
                         "#4D5360",
                         "#AC64AD"
@@ -60,23 +60,23 @@ class PieChart extends React.Component {
       try {
           let result = await this.makeGraphQLQuery(`
            {
-            repository(owner:"scrapy", name:"scrapy") {
-                totalPR: pullRequests(first: 100, states: OPEN) {
-                    totalCount
+                repository(owner:"scrapy", name:"scrapy") {
+                    totalPR: pullRequests(first: 100, states: OPEN) {
+                        totalCount
+                    }
+                    openedPR: pullRequests(first: 100, states: OPEN) {
+                        totalCount
+                    }
+                    mergedPR: pullRequests(first: 100, states: MERGED) {
+                        totalCount
+                    }
+                    closedPR: pullRequests(first: 100, states: CLOSED) {
+                        totalCount
+                    }
+                    totalIssues: issues {
+                        totalCount
+                    }
                 }
-                openedPR: pullRequests(first: 100, states: OPEN) {
-                    totalCount
-                }
-                mergedPR: pullRequests(first: 100, states: MERGED) {
-                    totalCount
-                }
-                closedPR: pullRequests(first: 100, states: CLOSED) {
-                    totalCount
-                }
-                totalIssues: issues {
-                    totalCount
-                }
-            }
             }`
     );
 
@@ -91,11 +91,9 @@ class PieChart extends React.Component {
                         ...prevState.dataPie,
                         datasets:
                             [{
-                            data: [result.data.repository.totalPR.totalCount,
-                                result.data.repository.openedPR.totalCount,
-                                result.data.repository.mergedPR.totalCount,
+                            data: [result.data.repository.openedPR.totalCount,
                                 result.data.repository.closedPR.totalCount,
-                                result.data.repository.totalIssues.totalCount]
+                                result.data.repository.closedPR.totalCount + result.data.repository.mergedPR.totalCount]
 
                         }]}}));
       } catch (exception) {
@@ -104,10 +102,10 @@ class PieChart extends React.Component {
   }
 
   render() {
-    const { dataPie } = this.state;
     return (
       <MDBContainer>
         <Pie data={this.state.dataPie} options={{ responsive: true }} />
+        <p>Total PRs: {this.state.openedPR + this.state.closedPR + this.state.mergedPR}</p>
       </MDBContainer>
     );
   }
