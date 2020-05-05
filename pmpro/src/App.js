@@ -5,19 +5,6 @@ import { Layout } from './components/Layout';
 import { Dashboard } from './components/Dashboard';
 import './App.css';
 
-// const client = new ApolloClient({
-//     // this is the Apollo endpoint
-//     uri: "https://api.github.com/graphql"
-// });
-//
-// const App = () => (
-//     <ApolloProvider client={client}>
-//         <div>
-//             <Column />
-//         </div>
-//     </ApolloProvider>
-// )
-
 function App() {
   return (
     <React.Fragment>

@@ -4,7 +4,6 @@ import { Nav, Navbar } from 'react-bootstrap';
 import styled from 'styled-components';
 import { Dashboard } from './Dashboard'
 import { About } from './About';
-import InputPage from './InputPage';
 
 const Styles = styled.div`
   .navbar {
@@ -22,7 +21,7 @@ export const NavBar = () => (
     <Styles>
         <BrowserRouter>
             <Navbar expand="lg">
-                <Navbar.Brand href="/">PM Pro</Navbar.Brand> 
+                <Navbar.Brand href="/">PM Pro</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nax" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="ml-auto">

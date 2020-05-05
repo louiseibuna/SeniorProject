@@ -2,7 +2,6 @@ import React from 'react';
 import '../styles/Dashboard.css';
 import 'bootstrap-4-grid/css/grid.min.css';
 import PieChart from './PieChart';
-import LineChart from './LineChart';
 import InputPage from './InputPage';
 import DoughnutChart from './DoughnutChart';
 
