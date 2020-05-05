@@ -3,7 +3,8 @@ import '../styles/Dashboard.css';
 import 'bootstrap-4-grid/css/grid.min.css';
 import PieChart from './PieChart';
 import LineChart from './LineChart';
-import AxiosRequests from './AxiosRequests';
+import InputPage from './InputPage';
+import DoughnutChart from './DoughnutChart';
 
 export const Dashboard = () => (
     <div className="bootstrap-wrapper">
@@ -15,17 +16,18 @@ export const Dashboard = () => (
       </div>
       <div className="row">
         <div className="col-md-6">
-
             <h3>Pull Request Graph</h3>
             <PieChart />
         </div>
         <div className="col-md-6">
-            <h3>Line Graph</h3>
-            <LineChart />
+            <h3>PR Stats [FILLER]</h3>
+            <DoughnutChart />
         </div>
      </div>
+     <InputPage />
       <h4 style={{ display: 'none' }}>Dialog Shown/Hidden with Logic</h4>
     </div>
   </div>
+
 
 )
