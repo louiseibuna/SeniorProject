@@ -24,7 +24,6 @@ export const Dashboard = () => (
             <LineChart />
         </div>
      </div>
-     <AxiosRequests />
       <h4 style={{ display: 'none' }}>Dialog Shown/Hidden with Logic</h4>
     </div>
   </div>
