@@ -4,7 +4,7 @@ import { MDBContainer } from "mdbreact";
 import axios from "axios";
 
 const API_KEY = process.env.REACT_APP_API_KEY;
-
+ 
 require('dotenv').config()
 
 class PieChart extends React.Component {
@@ -104,7 +104,7 @@ class PieChart extends React.Component {
   render() {
     return (
       <MDBContainer>
-        
+
         <Pie data={this.state.dataPie} options={{ responsive: true }} />
         <p>Total PRs: {this.state.openedPR + this.state.closedPR + this.state.mergedPR}</p>
       </MDBContainer>
