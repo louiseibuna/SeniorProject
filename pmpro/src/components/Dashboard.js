@@ -1,7 +1,9 @@
 import React from 'react';
 import '../styles/Dashboard.css';
 import 'bootstrap-4-grid/css/grid.min.css';
-
+import PieChart from './PieChart';
+import InputPage from './InputPage';
+import DoughnutChart from './DoughnutChart';
 
 export const Dashboard = () => (
     <div className="bootstrap-wrapper">
@@ -14,13 +16,17 @@ export const Dashboard = () => (
       <div className="row">
         <div className="col-md-6">
             <h3>Pull Request Graph</h3>
+            <PieChart />
         </div>
         <div className="col-md-6">
-            <h3>Bar Graph</h3>
+            <h3>PR Stats [FILLER]</h3>
+            <DoughnutChart />
         </div>
      </div>
+     <InputPage />
       <h4 style={{ display: 'none' }}>Dialog Shown/Hidden with Logic</h4>
     </div>
   </div>
+
 
 )

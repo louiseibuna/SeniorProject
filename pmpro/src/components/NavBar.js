@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { Dashboard } from './Dashboard'
 import { About } from './About';
 
-
 const Styles = styled.div`
   .navbar {
     background-color: #222;
@@ -44,6 +43,6 @@ export const NavBar = () => (
                 <Route exact path='/about' component={About}/>
             </Switch>
         </BrowserRouter>
-        
+
     </Styles>
 )
