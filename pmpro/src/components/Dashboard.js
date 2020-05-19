@@ -5,6 +5,7 @@ import PieChart from './PieChart';
 import InputPage from './InputPage';
 import DoughnutChart from './DoughnutChart';
 
+
 export const Dashboard = () => (
     <div className="bootstrap-wrapper">
     <div className="app-container container">
@@ -27,6 +28,5 @@ export const Dashboard = () => (
       <h4 style={{ display: 'none' }}>Dialog Shown/Hidden with Logic</h4>
     </div>
   </div>
-
 
 )

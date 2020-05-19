@@ -4,10 +4,12 @@ import { NavBar } from './components/NavBar';
 import { Layout } from './components/Layout';
 import { Dashboard } from './components/Dashboard';
 import './App.css';
+import { SideBar } from './components/SideBar.js';
 
 function App() {
   return (
     <React.Fragment>
+      <SideBar>
       <Router>
         <NavBar>
           <Layout>
@@ -17,7 +19,7 @@ function App() {
           </Layout>
         </NavBar>
       </Router>
-
+      </SideBar>
     </React.Fragment>
   );
 }
