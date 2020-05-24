@@ -5,21 +5,24 @@ import { Layout } from './components/Layout';
 import { Dashboard } from './components/Dashboard';
 import './App.css';
 
-function App() {
-  return (
-    <React.Fragment>
-      <Router>
-        <NavBar>
-          <Layout>
-            <Switch>
-              <Route exact path="/" component={Dashboard} />
-            </Switch>
-          </Layout>
-        </NavBar>
-      </Router>
+class App extends React.Component {
 
-    </React.Fragment>
-  );
+    render () {
+      return (
+        <React.Fragment>
+          <Router>
+            <NavBar>
+              <Layout>
+                <Switch>
+                  <Route exact path="/" component={Dashboard} />
+                </Switch>
+              </Layout>
+            </NavBar>
+          </Router>
+
+        </React.Fragment>
+      );
+    }
 }
 
 export default App;

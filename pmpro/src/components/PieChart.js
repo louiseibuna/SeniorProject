@@ -7,16 +7,22 @@ const API_KEY = process.env.REACT_APP_API_KEY;
 
 require('dotenv').config()
 
+
 class PieChart extends React.Component {
-    constructor(){
-        super();
+
+    constructor(props){
+        super(props);
+        var date = new Date();
+        var day = date.getDate();
+        var month = date.getMonth() + 1;
+        var year = date.getFullYear();
+        var curDate = year + '-' + month + '-' + day;
+
+        this.sayHello = this.sayHello.bind(this);
         this.state = {
-            totalPR: '',
-            openedPR: '',
-            mergedPR: '',
-            closedPR: '',
-            totalIssues: '',
-            dataPie: {
+                curDate: curDate,
+                totalPR: '',
+                dataPie: {
                 labels: ["Open PRs", "Closed PRs", "Closed & Merged PRs"],
                 datasets: [
                     {
@@ -43,7 +49,11 @@ class PieChart extends React.Component {
         }
     }
 
-  makeGraphQLQuery(query) {
+  sayHello() {
+    alert('Hello!');
+  }
+
+  makeGraphQLQuery(query, variables) {
       return axios({
           "method": "POST",
           "headers": {
@@ -51,51 +61,60 @@ class PieChart extends React.Component {
           },
           "url": "https://api.github.com/graphql",
           "data": {
-              "query": query
+              "query": query,
+              "variables": variables
           }
       }).then(response => response.data);
   }
 
   async componentDidMount() {
-      try {
-          let result = await this.makeGraphQLQuery(`
-           {
-                repository(owner:"scrapy", name:"scrapy") {
-                    totalPR: pullRequests(first: 100, states: OPEN) {
-                        totalCount
-                    }
-                    openedPR: pullRequests(first: 100, states: OPEN) {
-                        totalCount
-                    }
-                    mergedPR: pullRequests(first: 100, states: MERGED) {
-                        totalCount
-                    }
-                    closedPR: pullRequests(first: 100, states: CLOSED) {
-                        totalCount
-                    }
-                    totalIssues: issues {
-                        totalCount
-                    }
+      const variables = {owner: "scrapy", name: "scrapy"};
+      const githubQuery = {query: "repo:scrapy/scrapy is:pr is:closed updated:>" + "2020-05-14"};
+
+      const allPRQuery = `
+       query ($owner: String!, $name: String!) {
+            repository(owner: $owner, name: $name) {
+                openedPR: pullRequests(first: 100, states: OPEN) {
+                    totalCount
                 }
-            }`
-    );
+                mergedPR: pullRequests(first: 100, states: MERGED) {
+                    totalCount
+                }
+                closedPR: pullRequests(first: 100, states: CLOSED) {
+                    totalCount
+                }
+            }
+        }`;
 
+      const withinLastMonth = `
+      {
+          search(query: $query, type: ISSUE, last: 100) {
+            issueCount
+            edges {
+              node {
+                ... on PullRequest {
+                  title
+                }
+              }
+            }
+          }
+        }`;
 
-    this.setState(prevState => ({
-                    totalPR: result.data.repository.totalPR.totalCount,
-                    openedPR: result.data.repository.openedPR.totalCount,
-                    mergedPR: result.data.repository.mergedPR.totalCount,
-                    closedPR: result.data.repository.closedPR.totalCount,
-                    totalIssues: result.data.repository.totalIssues.totalCount,
-                    dataPie: {
+      try {
+          let result = await this.makeGraphQLQuery(allPRQuery, variables);
+
+          const openedPR = result.data.repository.openedPR.totalCount;
+          const closedPR = result.data.repository.closedPR.totalCount;
+          const mergedAndClosedPR = result.data.repository.closedPR.totalCount + result.data.repository.mergedPR.totalCount;
+          const totalPR = openedPR + mergedAndClosedPR;
+
+          this.setState(prevState => ({
+                        totalPR: totalPR,
+                        dataPie: {
                         ...prevState.dataPie,
-                        datasets:
-                            [{
-                            data: [result.data.repository.openedPR.totalCount,
-                                result.data.repository.closedPR.totalCount,
-                                result.data.repository.closedPR.totalCount + result.data.repository.mergedPR.totalCount]
-
-                        }]}}));
+                            datasets: [{
+                                data: [openedPR, closedPR, mergedAndClosedPR]
+                            }]}}));
       } catch (exception) {
           console.error(exception);
       }
@@ -103,10 +122,15 @@ class PieChart extends React.Component {
 
   render() {
     return (
+
       <MDBContainer>
-        
+      <button onClick={this.sayHello}>
+      Last 7 Days
+      </button>
+
         <Pie data={this.state.dataPie} options={{ responsive: true }} />
-        <p>Total PRs: {this.state.openedPR + this.state.closedPR + this.state.mergedPR}</p>
+        <p>Total PRs: {this.state.totalPR}</p>
+        <p>Current Date: {this.state.curDate}</p>
       </MDBContainer>
     );
   }
