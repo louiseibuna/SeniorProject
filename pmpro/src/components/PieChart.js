@@ -17,10 +17,14 @@ class PieChart extends React.Component {
         var month = date.getMonth() + 1;
         var year = date.getFullYear();
         var curDate = year + '-' + month + '-' + day;
+        var weekDate = year + '-' + month + '-' + (day - 7);
+        var monthDate = year + '-' + (month - 1) + '-' + day;
 
         this.sayHello = this.sayHello.bind(this);
         this.state = {
                 curDate: curDate,
+                weekDate: weekDate,
+                monthDate: monthDate,
                 totalPR: '',
                 dataPie: {
                 labels: ["Open PRs", "Closed PRs", "Closed & Merged PRs"],
@@ -67,15 +71,22 @@ class PieChart extends React.Component {
       }).then(response => response.data);
   }
 
+
   async componentDidMount() {
       /* these consts are for the timeRangeQuery */
       /* TODO: Still need to be able to pass the date */
-      const query1 = "repo:scrapy/scrapy is:pr is:open updated:>" + "2020-03-29 ";
-      const query2 = "repo:scrapy/scrapy is:pr is:closed updated:>" + "2020-03-29 ";
-      const query3 = "repo:scrapy/scrapy is:pr is:merged updated:>" + "2020-03-29 ";
-      const variables = {query1: query1, query2: query2, query3: query3};
+      const query1 = "repo:scrapy/scrapy is:pr is:open updated:>" + "2020-05-23";
+      const query2 = "repo:scrapy/scrapy is:pr is:closed updated:>" + "2020-05-23";
+      const query3 = "repo:scrapy/scrapy is:pr is:merged updated:>" + "2020-05-23";
 
-      const timeRangeQUery = `
+      const query4 = "repo:scrapy/scrapy is:pr is:open updated:>" + "2020-04-30 ";
+      const query5 = "repo:scrapy/scrapy is:pr is:closed updated:>" + "2020-04-30 ";
+      const query6 = "repo:scrapy/scrapy is:pr is:merged updated:>" + "2020-04-30 ";
+
+      const variables = {query1: query1, query2: query2, query3: query3};
+      const monthVar = {query4: query4, query5: query5, query6: query6};
+
+      const weekQuery = `
         query ($query1: String!, $query2: String!, $query3: String!) {
             openedPR: search(query: $query1, type: ISSUE, last: 100) {
                 issueCount
@@ -87,6 +98,19 @@ class PieChart extends React.Component {
                 issueCount
             }
         }`;
+
+      const monthQuery = `
+         query ($query4: String!, $query5: String!, $query6: String!) {
+             openedPR: search(query: $query4, type: ISSUE, last: 100) {
+                 issueCount
+             }
+             closedPR: search(query: $query5, type: ISSUE, last: 100) {
+                 issueCount
+             }
+             mergedPR: search(query: $query6, type: ISSUE, last: 100) {
+                 issueCount
+             }
+         }`;
 
       /* consts for allPRQuery */
       const allPRVar = {owner: "scrapy", name: "scrapy"};
@@ -106,8 +130,10 @@ class PieChart extends React.Component {
             }
         }`;
 
+
+
       try {
-          let result = await this.makeGraphQLQuery(timeRangeQUery, variables);
+          let result = await this.makeGraphQLQuery(weekQuery, variables);
 
           // const openedPR = result.data.repository.openedPR.totalCount;
           // const closedPR = result.data.repository.closedPR.totalCount;
@@ -144,12 +170,10 @@ class PieChart extends React.Component {
 
         <Pie data={this.state.dataPie} options={{ responsive: true }} />
         <p>Total PRs: {this.state.totalPR}</p>
-        <p>Current Date: {this.state.curDate}</p>
+        <p>Current Date: {this.state.weekDate}</p>
       </MDBContainer>
     );
   }
 }
 
 export default PieChart;
-
-// data: [300, 50, 100, 40, 120],
