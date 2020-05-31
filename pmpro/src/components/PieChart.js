@@ -1,7 +1,6 @@
 import React, { Fragment } from "react";
 import { Pie } from "react-chartjs-2";
-import { MDBContainer, MDBBtn } from "mdbreact";
-import TabsMaterial from './TabsMaterial';
+import { MDBContainer, MDBBtn, MDBCard, MDBCardTitle } from "mdbreact";
 import axios from "axios";
 
 const API_KEY = process.env.REACT_APP_API_KEY;
@@ -13,15 +12,15 @@ class PieChart extends React.Component {
     constructor(props){
         super(props);
         var last_7_days_date = new Date();
-        var lastWeek = last_7_days_date.setDate(last_7_days_date.getDate() - 7);
-        var day1 = last_7_days_date.getDate();
+        last_7_days_date.setDate(last_7_days_date.getDate() - 7);
+        var day1 = ("0" + (last_7_days_date.getDate())).slice(-2);
         var month1 = ("0" + (last_7_days_date.getMonth() + 1)).slice(-2);
         var year1 = last_7_days_date.getFullYear();
         var date7 = year1 + '-' + month1 + '-' + day1;
 
         var last_30_days_date = new Date();
-        var day2 = last_30_days_date.getDate();
-        var lastMonth = last_30_days_date.setDate(last_30_days_date.getDate() - 30);
+        last_30_days_date.setDate(last_30_days_date.getDate() - 30);
+        var day2 = ("0" + (last_30_days_date.getDate())).slice(-2);
         var month2 = ("0" + (last_30_days_date.getMonth() + 1)).slice(-2);
         var year2 = last_30_days_date.getFullYear();
         var date30 = year2 + '-' + month2 + '-' + day2;
@@ -188,12 +187,18 @@ class PieChart extends React.Component {
     render() {
         return (
             <Fragment>
-              <MDBBtn color="info" onClick={ () => this.grabAllPRs() }>All Time</MDBBtn> &nbsp;
-              <MDBBtn color="info" onClick={ () => this.grabMonthPRs() }>Last 30 Days</MDBBtn> &nbsp;
-              <MDBBtn color="info" onClick={ () => this.grabWeekPRs() }>Last 7 Days</MDBBtn>
             <MDBContainer>
-                <Pie data={ this.state.dataPie } options={{ responsive: true }} />
-                <p>Total PRs: { this.state.totalPR }</p>
+                <MDBCard className="card-body" style={{ width: "35rem", marginTop: "1rem" }}>
+                  <MDBCardTitle>Pull Request Graph</MDBCardTitle>
+                  <Pie data={ this.state.dataPie } options={{ responsive: true }} />  &nbsp;
+                  <div className="flex-row">
+                  <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
+                  <MDBBtn color="info" onClick={ () => this.grabAllPRs() }>All Time</MDBBtn> &nbsp;
+                  <MDBBtn color="info" onClick={ () => this.grabMonthPRs() }>Last 30 Days</MDBBtn> &nbsp;
+                  <MDBBtn color="info" onClick={ () => this.grabWeekPRs() }>Last 7 Days</MDBBtn>
+                  </div>
+                  </div>
+                </MDBCard>
             </MDBContainer>
             </Fragment>
         );
