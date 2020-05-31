@@ -16,8 +16,8 @@ class InputPage extends Component {
           <div>
             <form onSubmit={this.onSubmit}>
               <label htmlFor="url">
-                Show open issues for https://github.com/
-              </label>
+                Owner/Repository
+              </label> &nbsp;
               <input
                 id="url"
                 type="text"
