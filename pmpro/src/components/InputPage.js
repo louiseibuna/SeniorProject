@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-//generate your own personal token in an .env file
-const axiosGithubGraphQL = axios.create({
+const axiosGitHubGraphQL = axios.create({
   baseURL: 'https://api.github.com/graphql',
   headers: {
     Authorization: `bearer ${
-      process.env.GH_PERSONAL_ACCESS_TOKEN
+      process.env.REACT_APP_GITHUB_PERSONAL_ACCESS_TOKEN
     }`,
-  }
+  },
 });
 
 const GET_ISSUES_OF_REPOSITORY = `
@@ -54,11 +53,12 @@ const GET_ISSUES_OF_REPOSITORY = `
 const getIssuesOfRepository = (path, cursor) => {
   const [organization, repository] = path.split('/');
 
-  return axiosGithubGraphQL.post('', {
+  return axiosGitHubGraphQL.post('', {
     query: GET_ISSUES_OF_REPOSITORY,
     variables: { organization, repository, cursor },
   });
 };
+
 
 const resolveIssuesQuery = (queryResult, cursor) => state => {
   const { data, errors } = queryResult.data;
@@ -93,7 +93,6 @@ const resolveIssuesQuery = (queryResult, cursor) => state => {
 class InputPage extends Component {
     state = {
     path: 'scrapy/scrapy',
-
     };
 
     componentDidMount() {
