@@ -24,13 +24,14 @@ class PieChart extends React.Component {
         var month2 = ("0" + (last_30_days_date.getMonth() + 1)).slice(-2);
         var year2 = last_30_days_date.getFullYear();
         var date30 = year2 + '-' + month2 + '-' + day2;
-        // var weekDate = year + '-' + month + '-' + (day - 7);
-        // var monthDate = year + '-' + (month - 1) + '-' + day;
 
         this.state = {
             last_7_days_date: date7,
             last_30_days_date: date30,
             totalPR: '',
+            owner: "npm",
+            repo: "cli",
+            value: '',
             dataPie: {
             labels: ["Open PRs", "Closed PRs", "Closed & Merged PRs"],
             datasets: [{
@@ -54,7 +55,9 @@ class PieChart extends React.Component {
                 }
             ]}
         }
+
     }
+
 
     makeGraphQLQuery(query, variables) {
         return axios({
@@ -71,7 +74,9 @@ class PieChart extends React.Component {
     }
 
     async grabAllPRs() {
-        const variables = {owner: "scrapy", name: "scrapy"};
+        const owner = this.props.owner;
+        const name = this.props.repo;
+        const variables = {owner: owner, name: name};
 
         const allPRQuery = `
             query ($owner: String!, $name: String!) {
@@ -95,9 +100,13 @@ class PieChart extends React.Component {
             const closedPR = result.data.repository.closedPR.totalCount;
             const mergedAndClosedPR = result.data.repository.mergedPR.totalCount;
             const totalPR = openedPR + closedPR + mergedAndClosedPR;
+            const owner = this.props.owner;
+            const repo = this.props.repo;
 
             this.setState(prevState =>
-                ({ totalPR: totalPR,
+                ({  owner: owner,
+                    repo: repo,
+                    totalPR: totalPR,
                     dataPie: {
                         ...prevState.dataPie,
                             datasets: [{
@@ -106,10 +115,12 @@ class PieChart extends React.Component {
     }
 
     async grabWeekPRs() {
+        const owner = this.props.owner;
+        const name = this.props.repo;
         const weekDate = this.state.last_7_days_date;
-        const query1 = "repo:scrapy/scrapy is:pr is:open updated:>" + weekDate;
-        const query2 = "repo:scrapy/scrapy is:pr is:closed updated:>" + weekDate;
-        const query3 = "repo:scrapy/scrapy is:pr is:merged updated:>" + weekDate;
+        const query1 = "repo:" + owner + "/" + name + " is:pr is:open updated:>" + weekDate;
+        const query2 = "repo:" + owner + "/" + name + " is:pr is:closed updated:>" + weekDate;
+        const query3 = "repo:" + owner + "/" + name + " is:pr is:merged updated:>" + weekDate;
 
         const variables = {query1: query1, query2: query2, query3: query3};
 
@@ -133,9 +144,13 @@ class PieChart extends React.Component {
             const closedPR = result.data.closedPR.issueCount - result.data.mergedPR.issueCount;
             const mergedAndClosedPR = result.data.mergedPR.issueCount;
             const totalPR = openedPR + closedPR + mergedAndClosedPR;
+            const owner = this.props.owner;
+            const repo = this.props.repo;
 
             this.setState(prevState =>
-                ({ totalPR: totalPR,
+                ({  owner: owner,
+                    repo: repo,
+                    totalPR: totalPR,
                     dataPie: {
                         ...prevState.dataPie,
                             datasets: [{
@@ -144,10 +159,12 @@ class PieChart extends React.Component {
     }
 
     async grabMonthPRs() {
+        const owner = this.props.owner;
+        const name = this.props.repo;
         const monthDate = this.state.last_30_days_date;
-        const query1 = "repo:scrapy/scrapy is:pr is:open updated:>" + monthDate;
-        const query2 = "repo:scrapy/scrapy is:pr is:closed updated:>" + monthDate;
-        const query3 = "repo:scrapy/scrapy is:pr is:merged updated:>" + monthDate;
+        const query1 = "repo:" + owner + "/" + name + " is:pr is:open updated:>" + monthDate;
+        const query2 = "repo:" + owner + "/" + name + " is:pr is:closed updated:>" + monthDate;
+        const query3 = "repo:" + owner + "/" + name + " is:pr is:merged updated:>" + monthDate;
         const variables = {query1: query1, query2: query2, query3: query3};
 
         const monthQuery = `
@@ -170,9 +187,13 @@ class PieChart extends React.Component {
             const closedPR = result.data.closedPR.issueCount - result.data.mergedPR.issueCount;
             const mergedAndClosedPR = result.data.mergedPR.issueCount;
             const totalPR = openedPR + closedPR + mergedAndClosedPR;
+            const owner = this.props.owner;
+            const repo = this.props.repo;
 
             this.setState(prevState =>
-                ({ totalPR: totalPR,
+                ({  owner: owner,
+                    repo: repo,
+                    totalPR: totalPR,
                     dataPie: {
                         ...prevState.dataPie,
                             datasets: [{
@@ -186,21 +207,27 @@ class PieChart extends React.Component {
 
     render() {
         return (
+            <div>
+
             <Fragment>
             <MDBContainer>
                 <MDBCard className="card-body" style={{ width: "35rem", marginTop: "1rem" }}>
                   <MDBCardTitle>Pull Request Graph</MDBCardTitle>
-                  <Pie data={ this.state.dataPie } options={{ responsive: true }} />  &nbsp;
+                  <Pie data={ this.state.dataPie } options={{ responsive: true }} /> &nbsp;
                   <div className="flex-row">
                   <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
                   <MDBBtn color="info" onClick={ () => this.grabAllPRs() }>All Time</MDBBtn> &nbsp;
                   <MDBBtn color="info" onClick={ () => this.grabMonthPRs() }>Last 30 Days</MDBBtn> &nbsp;
                   <MDBBtn color="info" onClick={ () => this.grabWeekPRs() }>Last 7 Days</MDBBtn>
                   </div>
+                  &nbsp;
+                  <p> <b>Total PRs:</b> { this.state.totalPR }</p>
+                  <button onClick={() => this.grabAllPRs() }> Update </button>
                   </div>
                 </MDBCard>
             </MDBContainer>
             </Fragment>
+            </div>
         );
     }
 }
