@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { NavBar } from './components/NavBar';
 import { Layout } from './components/Layout';
-import { Dashboard } from './components/Dashboard';
+import Dashboard from './components/Dashboard';
 import SideBar from "./components/SideBar2";
 import './App.css';
 

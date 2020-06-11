@@ -11,13 +11,13 @@ class StackedBarChart extends Component {
 
         series: [{
           name: 'Open',
-          data: [44, 55, 41, 67, 22, 43]
+          data: [44, 55, 41, 67]
         }, {
           name: 'Closed',
-          data: [13, 23, 20, 8, 13, 27]
+          data: [13, 23, 20, 8]
         }, {
           name: 'Merged & Closed',
-          data: [11, 17, 15, 15, 21, 14]
+          data: [11, 17, 15, 15]
         }],
         options: {
           chart: {
