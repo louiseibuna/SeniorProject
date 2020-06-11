@@ -10,14 +10,8 @@ class StackedBarChart extends Component {
       this.state = {
 
         series: [{
-          name: 'Open',
-          data: [44, 55, 41, 67]
-        }, {
-          name: 'Closed',
-          data: [13, 23, 20, 8]
-        }, {
-          name: 'Merged & Closed',
-          data: [11, 17, 15, 15]
+          name: 'Total Contributions',
+          data: [1121, 774, 506, 393, 250, 209, 182, 174, 173, 171]
         }],
         options: {
           chart: {
@@ -48,7 +42,7 @@ class StackedBarChart extends Component {
           },
           xaxis: {
             type: 'string',
-            categories: ['betty', 'archie', 'jughead', 'veronica'],
+            categories: ['dangra', 'kmike', 'redapple', 'elacuesta', 'void', 'curita', 'Gallaecio', 'pablohoffman', 'eliasdorneles', 'wRAR'],
           },
           legend: {
             position: 'right',
@@ -72,7 +66,7 @@ class StackedBarChart extends Component {
     return (
         <MDBContainer>
             <MDBCard className="card-body" style={{ width: "35rem", marginTop: "1rem" }}>
-              <MDBCardTitle>PR Participation</MDBCardTitle>
+              <MDBCardTitle>PR Contributors</MDBCardTitle>
               <div className="app">
                 <div className="row">
                   <div className="mixed-chart">
