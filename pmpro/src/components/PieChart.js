@@ -222,7 +222,7 @@ class PieChart extends React.Component {
                   </div>
                   &nbsp;
                   <p> <b>Total PRs:</b> { this.state.totalPR }</p>
-                  <button onClick={() => this.grabAllPRs() }> Update </button>
+                  <MDBBtn color="secondary" onClick={ () => this.grabAllPRs() }> Update Graph </MDBBtn>
                   </div>
                 </MDBCard>
             </MDBContainer>

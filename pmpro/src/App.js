@@ -11,11 +11,7 @@ class App extends React.Component {
     render () {
       return (
         <React.Fragment>
-        <div id="App">
-          <SideBar pageWrapId={"page-wrap"} outerContainerId={"App"} />
-        </div>
           <Router>
-          <SideBar pageWrapId={"page-wrap"} outerContainerId={"App"} />
             <NavBar>
               <Layout>
                 <Switch>
