@@ -12,7 +12,7 @@ class Dashboard extends React.Component {
           owner: "npm",
           repo: "cli",
       };
-  }
+    }
 
     render() {
       return (
@@ -26,7 +26,7 @@ class Dashboard extends React.Component {
                 <input onChange={e1 => this.setState({owner: e1.target.value })} /> &nbsp;
                 Repo &nbsp;
                 <input onChange={e => this.setState({repo: e.target.value })} /> &nbsp;
-                
+
               </div>
             </div>
 
