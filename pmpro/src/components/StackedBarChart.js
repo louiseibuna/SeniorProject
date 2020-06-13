@@ -14,7 +14,6 @@ class StackedBarChart extends Component {
 
       this.state = {
           bleh: ['so','what'],
-          usersRendered: false,
         series: [{
           name: 'Open',
           data: []
@@ -54,7 +53,7 @@ class StackedBarChart extends Component {
           },
           xaxis: {
             type: 'string',
-            categories: ["hi"],
+            categories: [],
           },
           legend: {
             position: 'right',
@@ -78,7 +77,7 @@ class StackedBarChart extends Component {
     componentDidMount() {
       const owner = "scrapy";
       const repo = "scrapy";
-      const apiUrl = 'https://api.github.com/repos/' + owner + '/' + repo + '/contributors?per_page=10';
+      const apiUrl = 'https://api.github.com/repos/' + owner + '/' + repo + '/assignees?per_page=10';
       fetch(apiUrl)
         .then((response) => response.json())
         .then((data) => {
@@ -107,7 +106,7 @@ class StackedBarChart extends Component {
         })
         .catch(console.log)
 
-        const users = ['dangra', 'kmike', 'redapple', 'elacuesta', 'void', 'curita', 'Gallaecio', 'pablohoffman', 'eliasdorneles', 'wRAR'];
+        const users = ['dangra', 'elacuesta', 'eliasdorneles', 'Gallaecio', 'kmike', 'lopuhin', 'noviluni', 'pablohoffman', 'shaneaevans', 'wRAR'];
 
         {users.map(user => (
             this.grabAllPRs(user)
@@ -132,9 +131,9 @@ class StackedBarChart extends Component {
 
 
     async grabAllPRs(user) {
-            const query1 = "repo:scrapy/scrapy is:pr is:open reviewed-by:" + user;
-            const query2 = "repo:scrapy/scrapy is:pr is:closed reviewed-by:" + user;
-            const query3 = "repo:scrapy/scrapy is:pr is:merged reviewed-by:" + user;
+            const query1 = "repo:scrapy/scrapy is:open reviewed-by:" + user;
+            const query2 = "repo:scrapy/scrapy is:closed reviewed-by:" + user;
+            const query3 = "repo:scrapy/scrapy is:merged reviewed-by:" + user;
 
             const variables = {query1: query1, query2: query2, query3: query3};
 
@@ -193,9 +192,7 @@ class StackedBarChart extends Component {
                   </div>
                 </div>
 
-                {this.state.series[0].data.map(item => (
-                    <li key={item}>{item}</li>
-                ))}
+                
               </div>
             </MDBCard>
         </MDBContainer>
