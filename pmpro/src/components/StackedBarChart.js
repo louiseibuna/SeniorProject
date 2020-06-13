@@ -13,15 +13,17 @@ class StackedBarChart extends Component {
       super(props);
 
       this.state = {
+          bleh: ['so','what'],
+          usersRendered: false,
         series: [{
           name: 'Open',
-          data: [1121, 774, 506, 393, 250, 209, 182, 174, 173, 171]
+          data: []
         },{
           name: 'Closed',
-          data: [13, 23, 20, 8, 13, 27]
+          data: []
         },{
           name: 'Merged & Closed',
-          data: [11, 17, 15, 15, 21, 14]
+          data: []
         }],
         options: {
           chart: {
@@ -52,7 +54,7 @@ class StackedBarChart extends Component {
           },
           xaxis: {
             type: 'string',
-            categories: [],
+            categories: ["hi"],
           },
           legend: {
             position: 'right',
@@ -73,59 +75,6 @@ class StackedBarChart extends Component {
 
     }
 
-    makeGraphQLQuery(query, variables) {
-        return axios({
-            "method": "POST",
-            "headers": {
-                "Authorization": 'Bearer ' + API_KEY
-            },
-            "url": "https://api.github.com/graphql",
-            "data": {
-                "query": query,
-                "variables": variables
-            }
-        }).then(response => response.data);
-    }
-
-
-    async grabAllPRs() {
-        const user = 1;
-        const query1 = "repo:scrapy/scrapy is:pr is:open reviewed-by:" + user;
-        const query2 = "repo:scrapy/scrapy is:pr is:closed reviewed-by:" + user;
-        const query3 = "repo:scrapy/scrapy is:pr is:merged reviewed-by:" + user;
-
-        const variables = {query1: query1, query2: query2, query3: query3};
-
-        const query = `
-            query ($query1: String!, $query2: String!, $query3: String!) {
-                openedPR: search(query: $query1, type: ISSUE, last: 100) {
-                    issueCount
-                }
-                closedPR: search(query: $query2, type: ISSUE, last: 100) {
-                    issueCount
-                }
-                mergedPR: search(query: $query3, type: ISSUE, last: 100) {
-                    issueCount
-                }
-            }`;
-
-        try {
-            let result = await this.makeGraphQLQuery(query, variables);
-
-            const openedPR = result.data.repository.openedPR.totalCount;
-            const closedPR = result.data.repository.closedPR.totalCount;
-            const mergedAndClosedPR = result.data.repository.mergedPR.totalCount;
-            const totalPR = openedPR + closedPR + mergedAndClosedPR;
-
-            this.setState(prevState =>
-                ({ totalPR: totalPR,
-                    dataPie: {
-                        ...prevState.dataPie,
-                            datasets: [{
-                                data: [openedPR, closedPR, mergedAndClosedPR] }]}}));
-        } catch (exception) { console.error(exception); }
-    }
-
     componentDidMount() {
       const owner = "scrapy";
       const repo = "scrapy";
@@ -134,6 +83,8 @@ class StackedBarChart extends Component {
         .then((response) => response.json())
         .then((data) => {
             this.setState(prevState => ({
+            ...prevState,
+            usersRendered: true,
             ...prevState,
             options: {
                 ...prevState.options,
@@ -156,10 +107,71 @@ class StackedBarChart extends Component {
         })
         .catch(console.log)
 
-        const users = this.state.options.xaxis.categories;
-        for (const user of users.entries()) {
-            this.grabAllPRs();
-        }
+        const users = ['dangra', 'kmike', 'redapple', 'elacuesta', 'void', 'curita', 'Gallaecio', 'pablohoffman', 'eliasdorneles', 'wRAR'];
+
+        {users.map(user => (
+            this.grabAllPRs(user)
+        ))}
+
+
+    }
+
+    makeGraphQLQuery(query, variables) {
+        return axios({
+            "method": "POST",
+            "headers": {
+                "Authorization": 'Bearer ' + API_KEY
+            },
+            "url": "https://api.github.com/graphql",
+            "data": {
+                "query": query,
+                "variables": variables
+            }
+        }).then(response => response.data);
+    }
+
+
+    async grabAllPRs(user) {
+            const query1 = "repo:scrapy/scrapy is:pr is:open reviewed-by:" + user;
+            const query2 = "repo:scrapy/scrapy is:pr is:closed reviewed-by:" + user;
+            const query3 = "repo:scrapy/scrapy is:pr is:merged reviewed-by:" + user;
+
+            const variables = {query1: query1, query2: query2, query3: query3};
+
+            const query = `
+                query ($query1: String!, $query2: String!, $query3: String!) {
+                    openedPR: search(query: $query1, type: ISSUE, last: 100) {
+                        issueCount
+                    }
+                    closedPR: search(query: $query2, type: ISSUE, last: 100) {
+                        issueCount
+                    }
+                    mergedPR: search(query: $query3, type: ISSUE, last: 100) {
+                        issueCount
+                    }
+                }`;
+
+
+            let result = await this.makeGraphQLQuery(query, variables);
+
+            const openedPR = result.data.openedPR.issueCount;
+            const closedPR = result.data.closedPR.issueCount - result.data.mergedPR.issueCount;
+            const mergedAndClosedPR = result.data.mergedPR.issueCount;
+            const totalPR = openedPR + closedPR + mergedAndClosedPR;
+
+            this.setState(prevState => ({
+            ...prevState,
+                // bleh: [this.state.bleh.concat(user)],
+                series: [{
+                    ...prevState.series,
+                    data: this.state.series[0].data.concat(openedPR),
+                    },
+                    {...prevState.series,
+                    data: this.state.series[1].data.concat(closedPR),
+                    },
+                    {...prevState.series,
+                    data: this.state.series[2].data.concat(mergedAndClosedPR),}]
+            }));
 
     }
 
@@ -180,6 +192,10 @@ class StackedBarChart extends Component {
                     />
                   </div>
                 </div>
+
+                {this.state.series[0].data.map(item => (
+                    <li key={item}>{item}</li>
+                ))}
               </div>
             </MDBCard>
         </MDBContainer>

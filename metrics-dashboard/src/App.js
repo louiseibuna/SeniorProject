@@ -43,7 +43,7 @@ class App extends Component {
         },
         {
           headers: {
-            Authorization: 'token ' + REACT_APP_API_KEY
+            Authorization: 'token 7eb60bcbdcef6403564b91992650213d1ebfb850'
           }
         }
       );
