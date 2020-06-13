@@ -3,7 +3,7 @@ import { Pie } from "react-chartjs-2";
 import { MDBContainer, MDBBtn, MDBCard, MDBCardTitle } from "mdbreact";
 import axios from "axios";
 
-const API_KEY = process.env.REACT_APP_API_KEY;
+const API_KEY = process.env.REACT_APP_PMPRO_API_KEY;
 
 require('dotenv').config()
 
