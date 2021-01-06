@@ -20,7 +20,7 @@
     "@testing-library/user-event": "^7.1.2",
     "apexcharts": "^3.19.2",
     "apollo-boost": "^0.4.7",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "bootstrap": "^4.4.1",
     "bootstrap-4-grid": "^3.4.0",
     "canvasjs": "^1.8.3",
